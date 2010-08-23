@@ -66,4 +66,17 @@ class BoardTest < Test::Unit::TestCase
     end
   end
 
+  test "Only intersections within the board boundaries are accessible" do
+    off_board_positions = [[-1,0], [0,-1], [0,@board.size], [@board.size, 0]]
+    off_board_positions.each do |pos|
+      assert_raises(Go::Board::InvalidPositionError) do
+        @board[*pos]
+      end
+
+      # need to check for setters, too.
+      assert_raises(Go::Board::InvalidPositionError) do
+        @board[*pos] = :black
+      end
+    end
+  end
 end
